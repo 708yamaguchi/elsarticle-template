@@ -13,11 +13,14 @@ LATEXMK_EXEC := latexmk $(LATEXMK_OPTION)
 
 .PHONY: all install preview clean wipe
 
-all: install
+all: install cls
 	$(LATEXMK_EXEC) $(TARGET)
 
-preview: install
+preview: install cls
 	$(LATEXMK_EXEC) -pv $(TARGET)
+
+cls: install
+	cd elsarticle; latex elsarticle.ins; mv elsarticle.cls ..
 
 clean: install
 	$(LATEXMK_EXEC) -c
@@ -30,7 +33,7 @@ install:
 ifndef LATEXMK
 	@echo 'installing components...'
 ifeq ($(OS), Linux)
-	sudo apt install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv latexmk
+	sudo apt install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-humanities xdvik-ja dvipsk-ja gv latexmk
 endif
 ifeq ($(OS), Darwin)
 	brew tap caskroom/cask && brew cask install -v mactex && sudo tlmgr update --self --all
